@@ -1,0 +1,12 @@
+
+The patch is available: [0001-cpld-copy-IQ-on-header.patch](0001-cpld-copy-IQ-on-header.patch)
+
+To apply this patch:
+
+~~~
+git clone https://github.com/mossmann/hackrf.git hackrf
+cd hackrf
+git checkout v2017.02.1
+patch -p1 < ../0001-cpld-copy-IQ-on-header.patch
+~~~
+

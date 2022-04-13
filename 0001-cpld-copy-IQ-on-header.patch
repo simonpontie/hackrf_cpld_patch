@@ -1,0 +1,65 @@
+From e3a06464a4a68279167dc7e34209d79af2e04d19 Mon Sep 17 00:00:00 2001
+From: "" <>
+Date: Wed, 13 Apr 2022 18:41:56 +0200
+Subject: [PATCH] cpld copy IQ on header
+
+---
+ firmware/cpld/sgpio_if/top.ucf | 12 ++++++++++++
+ firmware/cpld/sgpio_if/top.vhd | 11 +++++++++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/firmware/cpld/sgpio_if/top.ucf b/firmware/cpld/sgpio_if/top.ucf
+index db85ab1..99faee7 100755
+--- a/firmware/cpld/sgpio_if/top.ucf
++++ b/firmware/cpld/sgpio_if/top.ucf
+@@ -43,6 +43,18 @@ NET "DD<3>" LOC="30" |IOSTANDARD=LVCMOS33 | SLEW=SLOW | TNM=dac_data;
+ NET "DD<2>" LOC="32" |IOSTANDARD=LVCMOS33 | SLEW=SLOW | TNM=dac_data;
+ NET "DD<1>" LOC="33" |IOSTANDARD=LVCMOS33 | SLEW=SLOW | TNM=dac_data;
+ NET "DD<0>" LOC="34" |IOSTANDARD=LVCMOS33 | SLEW=SLOW | TNM=dac_data;
++
++NET "DA_DATA<0>" LOC = "P13" | IOSTANDARD = LVCMOS33 ;
++NET "DA_DATA<1>" LOC = "P12" | IOSTANDARD = LVCMOS33 ;
++NET "DA_DATA<2>" LOC = "P11" | IOSTANDARD = LVCMOS33 ;
++NET "DA_DATA<3>" LOC = "P10" | IOSTANDARD = LVCMOS33 ;
++NET "DA_DATA<4>" LOC = "P9"  | IOSTANDARD = LVCMOS33 ;
++NET "DA_DATA<5>" LOC = "P8"  | IOSTANDARD = LVCMOS33 ;
++NET "DA_DATA<6>" LOC = "P7"  | IOSTANDARD = LVCMOS33 ;
++NET "DA_DATA<7>" LOC = "P6"  | IOSTANDARD = LVCMOS33 ;
++
++NET "CODEC_CLK_DATA" 	LOC = "P4" | IOSTANDARD = LVCMOS33 ;
++NET "CODEC_X2_CLK_DATA" LOC = "P3" | IOSTANDARD = LVCMOS33 ;
+ 
+ NET "HOST_DIRECTION" LOC="71" |IOSTANDARD=LVCMOS33 | SLEW=SLOW;
+ NET "HOST_DISABLE"   LOC="76" |IOSTANDARD=LVCMOS33 | SLEW=SLOW;
+diff --git a/firmware/cpld/sgpio_if/top.vhd b/firmware/cpld/sgpio_if/top.vhd
+index c74bcd0..f85a55c 100755
+--- a/firmware/cpld/sgpio_if/top.vhd
++++ b/firmware/cpld/sgpio_if/top.vhd
+@@ -39,7 +39,11 @@ entity top is
+         DD              : out   std_logic_vector(9 downto 0);
+ 
+         CODEC_CLK       : in    std_logic;
+-        CODEC_X2_CLK    : in    std_logic
++        CODEC_X2_CLK    : in    std_logic;
++
++        DA_DATA           : out std_logic_vector(7 downto 0);
++        CODEC_CLK_DATA    : out std_logic;
++        CODEC_X2_CLK_DATA : out std_logic
+     );
+ 
+ end top;
+@@ -74,7 +78,10 @@ begin
+     -- Codec interface
+     
+     adc_data_i <= DA(7 downto 0);    
+-    DD(9 downto 0) <= dac_data_o;
++    DD(9 downto 0) <= dac_data_o;
++    DA_DATA(7 downto 0) <= data_to_host_o;
++    CODEC_CLK_DATA <= codec_clk_i;
++    CODEC_X2_CLK_DATA <= host_clk_i;
+     
+     ------------------------------------------------
+     -- Clocks
+-- 
+2.20.1
+
